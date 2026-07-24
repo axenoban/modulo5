@@ -227,7 +227,15 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Patch(
+     *      path="/api/asignaciones/{id}/restore",
+     *      summary="Restaurar asignación eliminada lógicamente",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(response=200, description="Restaurado exitosamente")
+     * )
+     */
     public function restore($id)
     {
         try {
@@ -261,7 +269,14 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Get(
+     *      path="/api/asignaciones/all-with-deleted",
+     *      summary="Obtener todas las asignaciones (incluyendo eliminadas)",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Response(response=200, description="Operación exitosa")
+     * )
+     */
     public function allWithDeleted()
     {
         try {
@@ -284,7 +299,14 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Get(
+     *      path="/api/asignaciones/trashed",
+     *      summary="Listar solo asignaciones eliminadas (estado = 0)",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Response(response=200, description="Operación exitosa")
+     * )
+     */
     public function trashed()
     {
         try {
@@ -307,7 +329,15 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Delete(
+     *      path="/api/asignaciones/{id}/force",
+     *      summary="Eliminar asignación físicamente de la base de datos",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(response=200, description="Eliminado físicamente correctamente")
+     * )
+     */
     public function forceDelete($id)
     {
         try {
@@ -340,7 +370,15 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Get(
+     *      path="/api/asignaciones/trabajo/{idTrabajo}",
+     *      summary="Obtener asignaciones por trabajo de mantenimiento",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Parameter(name="idTrabajo", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(response=200, description="Operación exitosa")
+     * )
+     */
     public function byTrabajo($idTrabajo)
     {
         try {
@@ -376,7 +414,15 @@ class AsignacionController extends Controller
 
         }
     }
-
+/**
+     * @OA\Get(
+     *      path="/api/asignaciones/personal/{idPersonal}",
+     *      summary="Obtener asignaciones por ID de personal",
+     *      tags={"Asignaciones de Personal"},
+     *      @OA\Parameter(name="idPersonal", in="path", required=true, @OA\Schema(type="integer")),
+     *      @OA\Response(response=200, description="Operación exitosa")
+     * )
+     */
     public function byPersonal($idPersonal)
     {
         try {
