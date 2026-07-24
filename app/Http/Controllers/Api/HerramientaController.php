@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
 class HerramientaController extends Controller
 {
     #[OA\Get(
-        path: "/api/herramientas",
+        path: "/herramientas",
         summary: "Listar herramientas activas",
         tags: ["Herramientas"],
         responses: [
@@ -37,7 +37,7 @@ class HerramientaController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/herramientas",
+        path: "/herramientas",
         summary: "Registrar nueva herramienta",
         tags: ["Herramientas"],
         requestBody: new OA\RequestBody(
@@ -89,7 +89,7 @@ class HerramientaController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/herramientas/{id}",
+        path: "/herramientas/{id}",
         summary: "Obtener herramienta por ID",
         tags: ["Herramientas"],
         parameters: [
@@ -125,7 +125,7 @@ class HerramientaController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/herramientas/{id}",
+        path: "/herramientas/{id}",
         summary: "Actualizar herramienta",
         tags: ["Herramientas"],
         parameters: [
@@ -134,6 +134,9 @@ class HerramientaController extends Controller
         requestBody: new OA\RequestBody(
             content: new OA\JsonContent(
                 properties: [
+                    new OA\Property(property: "id_categoria_herramienta", type: "integer"),
+                    new OA\Property(property: "nombre", type: "string"),
+                    new OA\Property(property: "nro_serie_interno", type: "string"),
                     new OA\Property(property: "estado_fisico", type: "string", enum: ["excelente", "bueno", "regular", "malo"])
                 ]
             )
@@ -181,7 +184,7 @@ class HerramientaController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/herramientas/{id}",
+        path: "/herramientas/{id}",
         summary: "Desactivar herramienta (Soft Delete)",
         tags: ["Herramientas"],
         parameters: [
@@ -221,6 +224,17 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Patch(
+        path: "/herramientas/{id}/restore",
+        summary: "Restaurar herramienta eliminada lógicamente",
+        tags: ["Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
@@ -251,6 +265,14 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/herramientas/all-with-deleted",
+        summary: "Obtener todas las herramientas (incluyendo eliminadas)",
+        tags: ["Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -270,6 +292,14 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/herramientas/trashed",
+        summary: "Obtener solo herramientas eliminadas (estado = 0)",
+        tags: ["Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -289,6 +319,17 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/herramientas/categoria/{idCategoria}",
+        summary: "Obtener herramientas por categoría",
+        tags: ["Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "idCategoria", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byCategoria($idCategoria)
     {
         try {
@@ -320,6 +361,22 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/herramientas/estado-fisico/{estadoFisico}",
+        summary: "Obtener herramientas por estado físico",
+        tags: ["Herramientas"],
+        parameters: [
+            new OA\Parameter(
+                name: "estadoFisico",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string", enum: ["excelente", "bueno", "regular", "malo"])
+            )
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byEstadoFisico($estadoFisico)
     {
         try {
@@ -351,6 +408,17 @@ class HerramientaController extends Controller
         }
     }
 
+    #[OA\Delete(
+        path: "/herramientas/{id}/force",
+        summary: "Eliminar herramienta físicamente de la base de datos",
+        tags: ["Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
