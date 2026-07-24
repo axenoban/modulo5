@@ -183,6 +183,7 @@ return [
         // DEBE APUNTAR EXACTAMENTE A ESTA RUTA DE TUS CONTROLADORES
         base_path('app/Http/Controllers/Api'),
     ],
+   
         /*
          * API security definitions. Will be generated into documentation file.
         */

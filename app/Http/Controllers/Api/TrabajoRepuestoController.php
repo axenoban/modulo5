@@ -195,37 +195,37 @@ class TrabajoRepuestoController extends Controller
      * )
      */
     public function destroy($id)
-    {
-        try {
-            DB::beginTransaction();
-            $trabajoRepuesto = TrabajoRepuesto::where('estado', 1)->find($id);
+{
+    try {
+        DB::beginTransaction();
+        
+        $trabajo = TrabajoMantenimiento::where('estado', 1)->find($id);
 
-            if (!$trabajoRepuesto) {
-
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Trabajo-Repuesto no encontrado.'
-                ], 404);
-
-            }
-
-            $trabajoRepuesto->update(['estado' => 0]);
-            DB::commit();
-            return response()->json([
-                'success' => true,
-                'message' => 'Trabajo-Repuesto eliminado correctamente (estado = 0).'
-            ], 200);
-
-        } catch (Exception $e) {
-            DB::rollBack();
+        if (!$trabajo) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al eliminar el trabajo-repuesto.',
-                'error' => $e->getMessage()
-            ], 500);
-
+                'message' => 'Trabajo de mantenimiento no encontrado.'
+            ], 404);
         }
+
+        $trabajo->update(['estado' => 0]);
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Trabajo de mantenimiento eliminado correctamente (estado = 0).'
+        ], 200);
+
+    } catch (Exception $e) {
+        DB::rollBack();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al eliminar el trabajo de mantenimiento.',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
     public function restore($id)
     {
