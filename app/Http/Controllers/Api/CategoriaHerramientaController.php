@@ -1,23 +1,24 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use OpenApi\Annotations as OA;
+
 use App\Http\Controllers\Controller;
 use App\Models\CategoriaHerramienta;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
 class CategoriaHerramientaController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/categorias-herramientas",
-     *     summary="Listar categorías activas",
-     *     tags={"Categorías de Herramientas"},
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+    #[OA\Get(
+        path: "/api/categorias-herramientas",
+        summary: "Listar categorías activas",
+        tags: ["Categorías de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function index()
     {
         try {
@@ -37,20 +38,23 @@ class CategoriaHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Post(
-     *     path="/api/categorias-herramientas",
-     *     summary="Crear nueva categoría",
-     *     tags={"Categorías de Herramientas"},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nombre", type="string"),
-     *             @OA\Property(property="requiere_certificacion", type="boolean")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Creado exitosamente")
-     * )
-     */
+
+    #[OA\Post(
+        path: "/api/categorias-herramientas",
+        summary: "Crear nueva categoría",
+        tags: ["Categorías de Herramientas"],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "nombre", type: "string"),
+                    new OA\Property(property: "requiere_certificacion", type: "boolean")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Creado exitosamente")
+        ]
+    )]
     public function store(Request $request)
     {
         try {
@@ -87,16 +91,19 @@ class CategoriaHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *     path="/api/categorias-herramientas/{id}",
-     *     summary="Obtener categoría por ID",
-     *     tags={"Categorías de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Operación exitosa"),
-     *     @OA\Response(response=404, description="No encontrado")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/categorias-herramientas/{id}",
+        summary: "Obtener categoría por ID",
+        tags: ["Categorías de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa"),
+            new OA\Response(response: 404, description: "No encontrado")
+        ]
+    )]
     public function show($id)
     {
         try {
@@ -128,21 +135,26 @@ class CategoriaHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Put(
-     *     path="/api/categorias-herramientas/{id}",
-     *     summary="Actualizar categoría",
-     *     tags={"Categorías de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="nombre", type="string"),
-     *             @OA\Property(property="requiere_certificacion", type="boolean")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Actualizado exitosamente")
-     * )
-     */
+
+    #[OA\Put(
+        path: "/api/categorias-herramientas/{id}",
+        summary: "Actualizar categoría",
+        tags: ["Categorías de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "nombre", type: "string"),
+                    new OA\Property(property: "requiere_certificacion", type: "boolean")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Actualizado exitosamente")
+        ]
+    )]
     public function update(Request $request, $id)
     {
         try {
@@ -184,15 +196,18 @@ class CategoriaHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *     path="/api/categorias-herramientas/{id}",
-     *     summary="Eliminar categoría (Soft Delete)",
-     *     tags={"Categorías de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Eliminado correctamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/categorias-herramientas/{id}",
+        summary: "Eliminar categoría (Soft Delete)",
+        tags: ["Categorías de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado correctamente")
+        ]
+    )]
     // ELIMINADO LÓGICO - Cambiar estado a 0
     public function destroy($id)
     {
