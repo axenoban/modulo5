@@ -1,8 +1,8 @@
+
 <?php
 
 namespace App\Http\Controllers\Api;
 
-use OpenApi\Annotations as OA;
 use App\Http\Controllers\Controller;
 use App\Models\TrabajoHerramienta;
 use App\Models\TrabajoMantenimiento;
@@ -10,17 +10,18 @@ use App\Models\Herramienta;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
 class TrabajoHerramientaController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/trabajo-herramientas",
-     *     summary="Listar uso de herramientas",
-     *     tags={"Uso de Herramientas"},
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+    #[OA\Get(
+        path: "/api/trabajo-herramientas",
+        summary: "Listar uso de herramientas",
+        tags: ["Uso de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function index()
     {
         try {
@@ -39,21 +40,24 @@ class TrabajoHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Post(
-     *     path="/api/trabajo-herramientas",
-     *     summary="Registrar herramienta a un trabajo",
-     *     tags={"Uso de Herramientas"},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_trabajo_mantenimiento", type="integer"),
-     *             @OA\Property(property="id_herramienta", type="integer"),
-     *             @OA\Property(property="observacion", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Asignación exitosa")
-     * )
-     */
+
+    #[OA\Post(
+        path: "/api/trabajo-herramientas",
+        summary: "Registrar herramienta a un trabajo",
+        tags: ["Uso de Herramientas"],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "id_trabajo_mantenimiento", type: "integer"),
+                    new OA\Property(property: "id_herramienta", type: "integer"),
+                    new OA\Property(property: "observacion", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Asignación exitosa")
+        ]
+    )]
     public function store(Request $request)
     {
         try {
@@ -88,15 +92,18 @@ class TrabajoHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *     path="/api/trabajo-herramientas/{id}",
-     *     summary="Ver registro de herramienta por ID",
-     *     tags={"Uso de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/trabajo-herramientas/{id}",
+        summary: "Ver registro de herramienta por ID",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function show($id)
     {
         try {
@@ -127,20 +134,25 @@ class TrabajoHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Put(
-     *     path="/api/trabajo-herramientas/{id}",
-     *     summary="Actualizar registro de herramienta",
-     *     tags={"Uso de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="observacion", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Actualizado exitosamente")
-     * )
-     */
+
+    #[OA\Put(
+        path: "/api/trabajo-herramientas/{id}",
+        summary: "Actualizar registro de herramienta",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "observacion", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Actualizado exitosamente")
+        ]
+    )]
     public function update(Request $request, $id)
     {
         try {
@@ -181,15 +193,18 @@ class TrabajoHerramientaController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *     path="/api/trabajo-herramientas/{id}",
-     *     summary="Remover registro de herramienta (Soft Delete)",
-     *     tags={"Uso de Herramientas"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Eliminado correctamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/trabajo-herramientas/{id}",
+        summary: "Remover registro de herramienta (Soft Delete)",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado correctamente")
+        ]
+    )]
     public function destroy($id)
     {
         try {
