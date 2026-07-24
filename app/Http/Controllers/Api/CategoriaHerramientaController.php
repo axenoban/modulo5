@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
 class CategoriaHerramientaController extends Controller
 {
     #[OA\Get(
-        path: "/api/categorias-herramientas",
+        path: "/categorias-herramientas",
         summary: "Listar categorías activas",
         tags: ["Categorías de Herramientas"],
         responses: [
@@ -22,7 +22,6 @@ class CategoriaHerramientaController extends Controller
     public function index()
     {
         try {
-            // Solo obtener categorías activas (estado = 1)
             return response()->json([
                 'success' => true,
                 'data' => CategoriaHerramienta::where('estado', 1)->get()
@@ -40,7 +39,7 @@ class CategoriaHerramientaController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/categorias-herramientas",
+        path: "/categorias-herramientas",
         summary: "Crear nueva categoría",
         tags: ["Categorías de Herramientas"],
         requestBody: new OA\RequestBody(
@@ -65,7 +64,6 @@ class CategoriaHerramientaController extends Controller
                 'estado' => 'sometimes|boolean'
             ]);
 
-            // Si no se envía estado, por defecto será 1 (activo)
             $data = $request->all();
             if (!isset($data['estado'])) {
                 $data['estado'] = 1;
@@ -93,7 +91,7 @@ class CategoriaHerramientaController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/categorias-herramientas/{id}",
+        path: "/categorias-herramientas/{id}",
         summary: "Obtener categoría por ID",
         tags: ["Categorías de Herramientas"],
         parameters: [
@@ -108,7 +106,6 @@ class CategoriaHerramientaController extends Controller
     {
         try {
 
-            // Buscar solo si está activa (estado = 1)
             $categoria = CategoriaHerramienta::where('estado', 1)->find($id);
 
             if (!$categoria) {
@@ -137,7 +134,7 @@ class CategoriaHerramientaController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/categorias-herramientas/{id}",
+        path: "/categorias-herramientas/{id}",
         summary: "Actualizar categoría",
         tags: ["Categorías de Herramientas"],
         parameters: [
@@ -158,8 +155,7 @@ class CategoriaHerramientaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-              DB::beginTransaction();
-            // Buscar solo si está activa (estado = 1)
+            DB::beginTransaction();
             $categoria = CategoriaHerramienta::where('estado', 1)->find($id);
 
             if (!$categoria) {
@@ -170,7 +166,7 @@ class CategoriaHerramientaController extends Controller
                 ], 404);
 
             }
-            DB::commit();
+
             $request->validate([
                 'nombre' => 'sometimes|unique:categorias_herramientas,nombre,' . $id . ',id_categoria_herramienta',
                 'requiere_certificacion' => 'sometimes|boolean',
@@ -178,6 +174,7 @@ class CategoriaHerramientaController extends Controller
             ]);
 
             $categoria->update($request->all());
+            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -198,7 +195,7 @@ class CategoriaHerramientaController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/categorias-herramientas/{id}",
+        path: "/categorias-herramientas/{id}",
         summary: "Eliminar categoría (Soft Delete)",
         tags: ["Categorías de Herramientas"],
         parameters: [
@@ -208,12 +205,10 @@ class CategoriaHerramientaController extends Controller
             new OA\Response(response: 200, description: "Eliminado correctamente")
         ]
     )]
-    // ELIMINADO LÓGICO - Cambiar estado a 0
     public function destroy($id)
     {
         try {
             DB::beginTransaction();
-            // Buscar solo si está activa (estado = 1)
             $categoria = CategoriaHerramienta::where('estado', 1)->find($id);
 
             if (!$categoria) {
@@ -225,9 +220,9 @@ class CategoriaHerramientaController extends Controller
 
             }
 
-            // Eliminado lógico: cambiar estado a 0
             $categoria->update(['estado' => 0]);
             DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Categoría de herramienta eliminada correctamente (estado = 0).'
@@ -245,14 +240,21 @@ class CategoriaHerramientaController extends Controller
         }
     }
 
-    // === MÉTODOS NUEVOS PARA EL ELIMINADO LÓGICO CON ESTADO ===
-
-    // Restaurar categoría (cambiar estado a 1)
+    #[OA\Patch(
+        path: "/categorias-herramientas/{id}/restore",
+        summary: "Restaurar categoría eliminada lógicamente",
+        tags: ["Categorías de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
             DB::beginTransaction();
-            // Buscar la categoría que esté eliminada (estado = 0)
             $categoria = CategoriaHerramienta::where('estado', 0)->find($id);
 
             if (!$categoria) {
@@ -264,9 +266,9 @@ class CategoriaHerramientaController extends Controller
 
             }
 
-            // Restaurar: cambiar estado a 1
             $categoria->update(['estado' => 1]);
             DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Categoría de herramienta restaurada correctamente (estado = 1).',
@@ -284,7 +286,14 @@ class CategoriaHerramientaController extends Controller
         }
     }
 
-    // Obtener todas las categorías (incluyendo eliminadas)
+    #[OA\Get(
+        path: "/categorias-herramientas/all-with-deleted",
+        summary: "Obtener todas las categorías (incluyendo eliminadas)",
+        tags: ["Categorías de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -308,7 +317,14 @@ class CategoriaHerramientaController extends Controller
         }
     }
 
-    // Obtener solo categorías eliminadas (estado = 0)
+    #[OA\Get(
+        path: "/categorias-herramientas/trashed",
+        summary: "Obtener solo categorías eliminadas (estado = 0)",
+        tags: ["Categorías de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -332,7 +348,17 @@ class CategoriaHerramientaController extends Controller
         }
     }
 
-    // Eliminación física (realmente eliminar de la BD)
+    #[OA\Delete(
+        path: "/categorias-herramientas/{id}/force",
+        summary: "Eliminar categoría físicamente de la base de datos",
+        tags: ["Categorías de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
@@ -348,7 +374,6 @@ class CategoriaHerramientaController extends Controller
 
             }
 
-            // Eliminación física (real)
             $categoria->delete();
 
             return response()->json([
