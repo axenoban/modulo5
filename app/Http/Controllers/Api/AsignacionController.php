@@ -14,7 +14,7 @@ use OpenApi\Attributes as OA;
 class AsignacionController extends Controller
 {
     #[OA\Get(
-        path: "/api/asignaciones",
+        path: "/asignaciones",
         summary: "Listar asignaciones de personal",
         tags: ["Asignaciones de Personal"],
         responses: [
@@ -41,7 +41,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/asignaciones",
+        path: "/asignaciones",
         summary: "Asignar personal a un trabajo",
         tags: ["Asignaciones de Personal"],
         requestBody: new OA\RequestBody(
@@ -95,7 +95,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/asignaciones/{id}",
+        path: "/asignaciones/{id}",
         summary: "Ver asignación por ID",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -137,7 +137,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/asignaciones/{id}",
+        path: "/asignaciones/{id}",
         summary: "Actualizar asignación",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -198,7 +198,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/asignaciones/{id}",
+        path: "/asignaciones/{id}",
         summary: "Remover asignación (Soft Delete)",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -244,7 +244,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Patch(
-        path: "/api/asignaciones/{id}/restore",
+        path: "/asignaciones/{id}/restore",
         summary: "Restaurar asignación eliminada lógicamente",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -289,7 +289,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/asignaciones/all-with-deleted",
+        path: "/asignaciones/all-with-deleted",
         summary: "Obtener todas las asignaciones (incluyendo eliminadas)",
         tags: ["Asignaciones de Personal"],
         responses: [
@@ -320,7 +320,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/asignaciones/trashed",
+        path: "/asignaciones/trashed",
         summary: "Listar solo asignaciones eliminadas (estado = 0)",
         tags: ["Asignaciones de Personal"],
         responses: [
@@ -351,7 +351,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/asignaciones/{id}/force",
+        path: "/asignaciones/{id}/force",
         summary: "Eliminar asignación físicamente de la base de datos",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -395,7 +395,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/asignaciones/trabajo/{idTrabajo}",
+        path: "/asignaciones/trabajo/{idTrabajo}",
         summary: "Obtener asignaciones por trabajo de mantenimiento",
         tags: ["Asignaciones de Personal"],
         parameters: [
@@ -442,7 +442,7 @@ class AsignacionController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/asignaciones/personal/{idPersonal}",
+        path: "/asignaciones/personal/{idPersonal}",
         summary: "Obtener asignaciones por ID de personal",
         tags: ["Asignaciones de Personal"],
         parameters: [
