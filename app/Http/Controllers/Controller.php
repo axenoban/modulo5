@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[OA\Server(
-    url: "https://modulo5-production.up.railway.app",
+    url: "https://modulo5-production.up.railway.app/api",
     description: "Servidor de Producción Railway"
 )]
 #[OA\SecurityScheme(
