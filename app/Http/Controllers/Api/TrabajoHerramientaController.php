@@ -14,7 +14,7 @@ use OpenApi\Attributes as OA;
 class TrabajoHerramientaController extends Controller
 {
     #[OA\Get(
-        path: "/api/trabajo-herramientas",
+        path: "/trabajo-herramientas",
         summary: "Listar uso de herramientas",
         tags: ["Uso de Herramientas"],
         responses: [
@@ -41,7 +41,7 @@ class TrabajoHerramientaController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/trabajo-herramientas",
+        path: "/trabajo-herramientas",
         summary: "Registrar herramienta a un trabajo",
         tags: ["Uso de Herramientas"],
         requestBody: new OA\RequestBody(
@@ -93,7 +93,7 @@ class TrabajoHerramientaController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/trabajo-herramientas/{id}",
+        path: "/trabajo-herramientas/{id}",
         summary: "Ver registro de herramienta por ID",
         tags: ["Uso de Herramientas"],
         parameters: [
@@ -135,7 +135,7 @@ class TrabajoHerramientaController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/trabajo-herramientas/{id}",
+        path: "/trabajo-herramientas/{id}",
         summary: "Actualizar registro de herramienta",
         tags: ["Uso de Herramientas"],
         parameters: [
@@ -194,7 +194,7 @@ class TrabajoHerramientaController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/trabajo-herramientas/{id}",
+        path: "/trabajo-herramientas/{id}",
         summary: "Remover registro de herramienta (Soft Delete)",
         tags: ["Uso de Herramientas"],
         parameters: [
@@ -237,6 +237,17 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Patch(
+        path: "/trabajo-herramientas/{id}/restore",
+        summary: "Restaurar registro de herramienta eliminado lógicamente",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
@@ -272,6 +283,14 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-herramientas/all-with-deleted",
+        summary: "Obtener todos los registros de herramientas (incluyendo eliminados)",
+        tags: ["Uso de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -295,6 +314,14 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-herramientas/trashed",
+        summary: "Obtener solo registros de herramientas eliminados (estado = 0)",
+        tags: ["Uso de Herramientas"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -320,6 +347,17 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Delete(
+        path: "/trabajo-herramientas/{id}/force",
+        summary: "Eliminar registro de herramienta físicamente de la base de datos",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
@@ -353,6 +391,17 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-herramientas/trabajo/{idTrabajo}",
+        summary: "Obtener registros de herramientas por trabajo de mantenimiento",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "idTrabajo", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byTrabajo($idTrabajo)
     {
         try {
@@ -389,6 +438,17 @@ class TrabajoHerramientaController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-herramientas/herramienta/{idHerramienta}",
+        summary: "Obtener trabajos por ID de herramienta",
+        tags: ["Uso de Herramientas"],
+        parameters: [
+            new OA\Parameter(name: "idHerramienta", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byHerramienta($idHerramienta)
     {
         try {
