@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use OpenApi\Annotations as OA;
+
 use App\Http\Controllers\Controller;
 use App\Models\Asignacion;
 use App\Models\TrabajoMantenimiento;
@@ -9,17 +9,18 @@ use App\Models\Personal;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
 class AsignacionController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/asignaciones",
-     *     summary="Listar asignaciones de personal",
-     *     tags={"Asignaciones de Personal"},
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+    #[OA\Get(
+        path: "/api/asignaciones",
+        summary: "Listar asignaciones de personal",
+        tags: ["Asignaciones de Personal"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function index()
     {
         try {
@@ -38,22 +39,25 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Post(
-     *     path="/api/asignaciones",
-     *     summary="Asignar personal a un trabajo",
-     *     tags={"Asignaciones de Personal"},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_trabajo_mantenimiento", type="integer"),
-     *             @OA\Property(property="id_personal", type="integer"),
-     *             @OA\Property(property="rol_asignacion", type="string"),
-     *             @OA\Property(property="horas_invertidas", type="number", format="float")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Asignación exitosa")
-     * )
-     */
+
+    #[OA\Post(
+        path: "/api/asignaciones",
+        summary: "Asignar personal a un trabajo",
+        tags: ["Asignaciones de Personal"],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "id_trabajo_mantenimiento", type: "integer"),
+                    new OA\Property(property: "id_personal", type: "integer"),
+                    new OA\Property(property: "rol_asignacion", type: "string"),
+                    new OA\Property(property: "horas_invertidas", type: "number", format: "float")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Asignación exitosa")
+        ]
+    )]
     public function store(Request $request)
     {
         try {
@@ -89,15 +93,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *     path="/api/asignaciones/{id}",
-     *     summary="Ver asignación por ID",
-     *     tags={"Asignaciones de Personal"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/asignaciones/{id}",
+        summary: "Ver asignación por ID",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function show($id)
     {
         try {
@@ -128,21 +135,26 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Put(
-     *     path="/api/asignaciones/{id}",
-     *     summary="Actualizar asignación",
-     *     tags={"Asignaciones de Personal"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="horas_invertidas", type="number", format="float"),
-     *             @OA\Property(property="rol_asignacion", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Actualizado exitosamente")
-     * )
-     */
+
+    #[OA\Put(
+        path: "/api/asignaciones/{id}",
+        summary: "Actualizar asignación",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "horas_invertidas", type: "number", format: "float"),
+                    new OA\Property(property: "rol_asignacion", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Actualizado exitosamente")
+        ]
+    )]
     public function update(Request $request, $id)
     {
         try {
@@ -184,15 +196,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *     path="/api/asignaciones/{id}",
-     *     summary="Remover asignación (Soft Delete)",
-     *     tags={"Asignaciones de Personal"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Eliminado correctamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/asignaciones/{id}",
+        summary: "Remover asignación (Soft Delete)",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado correctamente")
+        ]
+    )]
     public function destroy($id)
     {
         try {
@@ -227,15 +242,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Patch(
-     *      path="/api/asignaciones/{id}/restore",
-     *      summary="Restaurar asignación eliminada lógicamente",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *      @OA\Response(response=200, description="Restaurado exitosamente")
-     * )
-     */
+
+    #[OA\Patch(
+        path: "/api/asignaciones/{id}/restore",
+        summary: "Restaurar asignación eliminada lógicamente",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
@@ -269,14 +287,15 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *      path="/api/asignaciones/all-with-deleted",
-     *      summary="Obtener todas las asignaciones (incluyendo eliminadas)",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/asignaciones/all-with-deleted",
+        summary: "Obtener todas las asignaciones (incluyendo eliminadas)",
+        tags: ["Asignaciones de Personal"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -299,14 +318,15 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *      path="/api/asignaciones/trashed",
-     *      summary="Listar solo asignaciones eliminadas (estado = 0)",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/asignaciones/trashed",
+        summary: "Listar solo asignaciones eliminadas (estado = 0)",
+        tags: ["Asignaciones de Personal"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -329,15 +349,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *      path="/api/asignaciones/{id}/force",
-     *      summary="Eliminar asignación físicamente de la base de datos",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *      @OA\Response(response=200, description="Eliminado físicamente correctamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/asignaciones/{id}/force",
+        summary: "Eliminar asignación físicamente de la base de datos",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
@@ -370,15 +393,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *      path="/api/asignaciones/trabajo/{idTrabajo}",
-     *      summary="Obtener asignaciones por trabajo de mantenimiento",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Parameter(name="idTrabajo", in="path", required=true, @OA\Schema(type="integer")),
-     *      @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/asignaciones/trabajo/{idTrabajo}",
+        summary: "Obtener asignaciones por trabajo de mantenimiento",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "idTrabajo", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byTrabajo($idTrabajo)
     {
         try {
@@ -414,15 +440,18 @@ class AsignacionController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *      path="/api/asignaciones/personal/{idPersonal}",
-     *      summary="Obtener asignaciones por ID de personal",
-     *      tags={"Asignaciones de Personal"},
-     *      @OA\Parameter(name="idPersonal", in="path", required=true, @OA\Schema(type="integer")),
-     *      @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/asignaciones/personal/{idPersonal}",
+        summary: "Obtener asignaciones por ID de personal",
+        tags: ["Asignaciones de Personal"],
+        parameters: [
+            new OA\Parameter(name: "idPersonal", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byPersonal($idPersonal)
     {
         try {
