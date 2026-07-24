@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use OpenApi\Annotations as OA;
 use App\Http\Controllers\Controller;
 use App\Models\TrabajoRepuesto;
 use App\Models\TrabajoMantenimiento;
@@ -10,17 +9,18 @@ use App\Models\Repuesto;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
 class TrabajoRepuestoController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/trabajo-repuestos",
-     *     summary="Listar uso de repuestos",
-     *     tags={"Uso de Repuestos"},
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+    #[OA\Get(
+        path: "/api/trabajo-repuestos",
+        summary: "Listar uso de repuestos",
+        tags: ["Uso de Repuestos"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function index()
     {
         try {
@@ -39,22 +39,25 @@ class TrabajoRepuestoController extends Controller
 
         }
     }
-/**
-     * @OA\Post(
-     *     path="/api/trabajo-repuestos",
-     *     summary="Registrar repuesto a un trabajo",
-     *     tags={"Uso de Repuestos"},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_trabajo_mantenimiento", type="integer"),
-     *             @OA\Property(property="id_repuesto", type="integer"),
-     *             @OA\Property(property="cantidad", type="integer"),
-     *             @OA\Property(property="observacion", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Asignación exitosa")
-     * )
-     */
+
+    #[OA\Post(
+        path: "/api/trabajo-repuestos",
+        summary: "Registrar repuesto a un trabajo",
+        tags: ["Uso de Repuestos"],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "id_trabajo_mantenimiento", type: "integer"),
+                    new OA\Property(property: "id_repuesto", type: "integer"),
+                    new OA\Property(property: "cantidad", type: "integer"),
+                    new OA\Property(property: "observacion", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Asignación exitosa")
+        ]
+    )]
     public function store(Request $request)
     {
         try {
@@ -90,15 +93,18 @@ class TrabajoRepuestoController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *     path="/api/trabajo-repuestos/{id}",
-     *     summary="Ver registro de repuesto por ID",
-     *     tags={"Uso de Repuestos"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/trabajo-repuestos/{id}",
+        summary: "Ver registro de repuesto por ID",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function show($id)
     {
         try {
@@ -129,21 +135,26 @@ class TrabajoRepuestoController extends Controller
 
         }
     }
-/**
-     * @OA\Put(
-     *     path="/api/trabajo-repuestos/{id}",
-     *     summary="Actualizar registro de repuesto",
-     *     tags={"Uso de Repuestos"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="cantidad", type="integer"),
-     *             @OA\Property(property="observacion", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Actualizado exitosamente")
-     * )
-     */
+
+    #[OA\Put(
+        path: "/api/trabajo-repuestos/{id}",
+        summary: "Actualizar registro de repuesto",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "cantidad", type: "integer"),
+                    new OA\Property(property: "observacion", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Actualizado exitosamente")
+        ]
+    )]
     public function update(Request $request, $id)
     {
         try {
@@ -185,15 +196,18 @@ class TrabajoRepuestoController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *     path="/api/trabajo-repuestos/{id}",
-     *     summary="Remover registro de repuesto (Soft Delete)",
-     *     tags={"Uso de Repuestos"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Eliminado correctamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/trabajo-repuestos/{id}",
+        summary: "Remover registro de repuesto (Soft Delete)",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado correctamente")
+        ]
+    )]
     public function destroy($id)
 {
     try {
