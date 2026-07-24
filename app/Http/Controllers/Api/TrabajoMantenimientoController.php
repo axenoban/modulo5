@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use OpenApi\Annotations as OA;
 use App\Http\Controllers\Controller;
 use App\Models\TrabajoMantenimiento;
 use App\Models\Mantenimiento;
@@ -10,17 +9,18 @@ use App\Models\Diagnostico;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use OpenApi\Attributes as OA;
 
 class TrabajoMantenimientoController extends Controller
 {
-    /**
- * @OA\Get(
- *     path="/api/trabajos-mantenimiento",
- *     summary="Listar todos los trabajos",
- *     tags={"Trabajos de Mantenimiento"},
- *     @OA\Response(response=200, description="Operación exitosa")
- * )
- */
+    #[OA\Get(
+        path: "/api/trabajos-mantenimiento",
+        summary: "Listar todos los trabajos",
+        tags: ["Trabajos de Mantenimiento"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function index()
     {
         try {
@@ -39,23 +39,26 @@ class TrabajoMantenimientoController extends Controller
 
         }
     }
-/**
-     * @OA\Post(
-     *     path="/api/trabajos-mantenimiento",
-     *     summary="Registrar trabajo de mantenimiento",
-     *     tags={"Trabajos de Mantenimiento"},
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="id_diagnostico", type="integer"),
-     *             @OA\Property(property="id_mantenimiento", type="integer"),
-     *             @OA\Property(property="fecha_programada", type="string", format="date"),
-     *             @OA\Property(property="fecha_inicio", type="string", format="date-time"),
-     *             @OA\Property(property="estado", type="string", enum={"pendiente","en_proceso","finalizado","cancelado"})
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Creado exitosamente")
-     * )
-     */
+
+    #[OA\Post(
+        path: "/api/trabajos-mantenimiento",
+        summary: "Registrar trabajo de mantenimiento",
+        tags: ["Trabajos de Mantenimiento"],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "id_diagnostico", type: "integer"),
+                    new OA\Property(property: "id_mantenimiento", type: "integer"),
+                    new OA\Property(property: "fecha_programada", type: "string", format: "date"),
+                    new OA\Property(property: "fecha_inicio", type: "string", format: "date-time"),
+                    new OA\Property(property: "estado", type: "string", enum: ["pendiente", "en_proceso", "finalizado", "cancelado"])
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Creado exitosamente")
+        ]
+    )]
     public function store(Request $request)
     {
         try {
@@ -88,15 +91,18 @@ class TrabajoMantenimientoController extends Controller
 
         }
     }
-/**
-     * @OA\Get(
-     *     path="/api/trabajos-mantenimiento/{id}",
-     *     summary="Obtener trabajo por ID",
-     *     tags={"Trabajos de Mantenimiento"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Operación exitosa")
-     * )
-     */
+
+    #[OA\Get(
+        path: "/api/trabajos-mantenimiento/{id}",
+        summary: "Obtener trabajo por ID",
+        tags: ["Trabajos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function show($id)
     {
         try {
@@ -127,21 +133,26 @@ class TrabajoMantenimientoController extends Controller
 
         }
     }
-/**
-     * @OA\Put(
-     *     path="/api/trabajos-mantenimiento/{id}",
-     *     summary="Actualizar estado del trabajo",
-     *     tags={"Trabajos de Mantenimiento"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="estado", type="string", enum={"pendiente","en_proceso","finalizado","cancelado"}),
-     *             @OA\Property(property="observaciones", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Actualizado exitosamente")
-     * )
-     */
+
+    #[OA\Put(
+        path: "/api/trabajos-mantenimiento/{id}",
+        summary: "Actualizar estado del trabajo",
+        tags: ["Trabajos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: "estado", type: "string", enum: ["pendiente", "en_proceso", "finalizado", "cancelado"]),
+                    new OA\Property(property: "observaciones", type: "string")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Actualizado exitosamente")
+        ]
+    )]
     public function update(Request $request, $id)
     {
         try {
@@ -185,15 +196,18 @@ class TrabajoMantenimientoController extends Controller
 
         }
     }
-/**
-     * @OA\Delete(
-     *     path="/api/trabajos-mantenimiento/{id}",
-     *     summary="Eliminar trabajo Físicamente",
-     *     tags={"Trabajos de Mantenimiento"},
-     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Response(response=200, description="Eliminado físicamente")
-     * )
-     */
+
+    #[OA\Delete(
+        path: "/api/trabajos-mantenimiento/{id}",
+        summary: "Eliminar trabajo Físicamente",
+        tags: ["Trabajos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente")
+        ]
+    )]
     public function destroy($id)
     {
         try {
