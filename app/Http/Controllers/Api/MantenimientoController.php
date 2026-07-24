@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
 class MantenimientoController extends Controller
 {
     #[OA\Get(
-        path: "/api/mantenimientos",
+        path: "/mantenimientos",
         summary: "Listar tipos de mantenimiento activos",
         tags: ["Tipos de Mantenimiento"],
         responses: [
@@ -39,7 +39,7 @@ class MantenimientoController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/mantenimientos",
+        path: "/mantenimientos",
         summary: "Crear tipo de mantenimiento",
         tags: ["Tipos de Mantenimiento"],
         requestBody: new OA\RequestBody(
@@ -95,7 +95,7 @@ class MantenimientoController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/mantenimientos/{id}",
+        path: "/mantenimientos/{id}",
         summary: "Obtener mantenimiento por ID",
         tags: ["Tipos de Mantenimiento"],
         parameters: [
@@ -137,7 +137,7 @@ class MantenimientoController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/mantenimientos/{id}",
+        path: "/mantenimientos/{id}",
         summary: "Actualizar mantenimiento",
         tags: ["Tipos de Mantenimiento"],
         parameters: [
@@ -146,6 +146,8 @@ class MantenimientoController extends Controller
         requestBody: new OA\RequestBody(
             content: new OA\JsonContent(
                 properties: [
+                    new OA\Property(property: "nombre", type: "string"),
+                    new OA\Property(property: "descripcion", type: "string"),
                     new OA\Property(property: "tarifa_base", type: "number", format: "float"),
                     new OA\Property(property: "tiempo_estimado", type: "integer")
                 ]
@@ -169,7 +171,7 @@ class MantenimientoController extends Controller
                 ], 404);
 
             }
-            
+
             $request->validate([
                 'nombre' => 'sometimes|unique:mantenimientos,nombre,' . $id . ',id_mantenimiento',
                 'descripcion' => 'nullable|string',
@@ -198,7 +200,7 @@ class MantenimientoController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/mantenimientos/{id}",
+        path: "/mantenimientos/{id}",
         summary: "Eliminar mantenimiento (Soft Delete)",
         tags: ["Tipos de Mantenimiento"],
         parameters: [
@@ -241,6 +243,17 @@ class MantenimientoController extends Controller
         }
     }
 
+    #[OA\Patch(
+        path: "/mantenimientos/{id}/restore",
+        summary: "Restaurar mantenimiento eliminado lógicamente",
+        tags: ["Tipos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
@@ -275,6 +288,14 @@ class MantenimientoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/mantenimientos/all-with-deleted",
+        summary: "Obtener todos los mantenimientos (incluyendo eliminados)",
+        tags: ["Tipos de Mantenimiento"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -298,6 +319,14 @@ class MantenimientoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/mantenimientos/trashed",
+        summary: "Obtener solo mantenimientos eliminados (estado = 0)",
+        tags: ["Tipos de Mantenimiento"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -321,6 +350,17 @@ class MantenimientoController extends Controller
         }
     }
 
+    #[OA\Delete(
+        path: "/mantenimientos/{id}/force",
+        summary: "Eliminar mantenimiento físicamente de la base de datos",
+        tags: ["Tipos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
