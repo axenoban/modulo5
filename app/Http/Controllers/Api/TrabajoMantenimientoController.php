@@ -14,7 +14,7 @@ use OpenApi\Attributes as OA;
 class TrabajoMantenimientoController extends Controller
 {
     #[OA\Get(
-        path: "/api/trabajos-mantenimiento",
+        path: "/trabajos-mantenimiento",
         summary: "Listar todos los trabajos",
         tags: ["Trabajos de Mantenimiento"],
         responses: [
@@ -41,7 +41,7 @@ class TrabajoMantenimientoController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/trabajos-mantenimiento",
+        path: "/trabajos-mantenimiento",
         summary: "Registrar trabajo de mantenimiento",
         tags: ["Trabajos de Mantenimiento"],
         requestBody: new OA\RequestBody(
@@ -93,7 +93,7 @@ class TrabajoMantenimientoController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/trabajos-mantenimiento/{id}",
+        path: "/trabajos-mantenimiento/{id}",
         summary: "Obtener trabajo por ID",
         tags: ["Trabajos de Mantenimiento"],
         parameters: [
@@ -135,7 +135,7 @@ class TrabajoMantenimientoController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/trabajos-mantenimiento/{id}",
+        path: "/trabajos-mantenimiento/{id}",
         summary: "Actualizar estado del trabajo",
         tags: ["Trabajos de Mantenimiento"],
         parameters: [
@@ -198,7 +198,7 @@ class TrabajoMantenimientoController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/trabajos-mantenimiento/{id}",
+        path: "/trabajos-mantenimiento/{id}",
         summary: "Eliminar trabajo Físicamente",
         tags: ["Trabajos de Mantenimiento"],
         parameters: [
@@ -242,10 +242,26 @@ class TrabajoMantenimientoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajos-mantenimiento/estado/{estado}",
+        summary: "Obtener trabajos por estado",
+        tags: ["Trabajos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(
+                name: "estado",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string", enum: ["pendiente", "en_proceso", "finalizado", "cancelado"])
+            )
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byEstado($estado)
     {
         try {
-    
+            
             $estadosValidos = ['pendiente', 'en_proceso', 'finalizado', 'cancelado'];
 
             if (!in_array($estado, $estadosValidos)) {
@@ -278,6 +294,17 @@ class TrabajoMantenimientoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajos-mantenimiento/mantenimiento/{idMantenimiento}",
+        summary: "Obtener trabajos por tipo de mantenimiento",
+        tags: ["Trabajos de Mantenimiento"],
+        parameters: [
+            new OA\Parameter(name: "idMantenimiento", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byMantenimiento($idMantenimiento)
     {
         try {
