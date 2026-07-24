@@ -44,7 +44,7 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                  */
                 'annotations' => [
-                    base_path('app'),
+                    base_path('app/Http/Controllers'),
                 ],
             ],
         ],
@@ -179,10 +179,7 @@ return [
              */
             'open_api_spec_version' => env('L5_SWAGGER_OPEN_API_SPEC_VERSION', \L5Swagger\Generator::OPEN_API_DEFAULT_SPEC_VERSION),
         ],
-'annotations' => [
-        // DEBE APUNTAR EXACTAMENTE A ESTA RUTA DE TUS CONTROLADORES
-        base_path('app/Http/Controllers/Api'),
-    ],
+
    
         /*
          * API security definitions. Will be generated into documentation file.
