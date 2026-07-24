@@ -11,11 +11,16 @@ use Illuminate\Support\Facades\DB;
  * @OA\Info(
  *      version="1.0.0",
  *      title="API Módulo de Mantenimiento",
- *      description="Documentación oficial de los microservicios del módulo de mantenimiento."
+ *      description="Documentación oficial de los microservicios."
  * )
  * @OA\Server(
- *      url="http://localhost:8000/api",
- *      description="Servidor de Desarrollo Local"
+ *      url="https://modulo5-production.up.railway.app/api",
+ *      description="Servidor de Producción"
+ * )
+ * @OA\SecurityScheme(
+ *      securityScheme="bearerAuth",
+ *      type="http",
+ *      scheme="bearer"
  * )
  */
 class CategoriaHerramientaController extends Controller
