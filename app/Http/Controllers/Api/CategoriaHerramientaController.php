@@ -7,30 +7,7 @@ use App\Models\CategoriaHerramienta;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\DB;
-/**
- * @OA\Info(
- *      version="1.0.0",
- *      title="API Módulo de Mantenimiento",
-<<<<<<< Updated upstream
- *      description="Documentación oficial de los microservicios."
- * )
- * @OA\Server(
- *      url="https://modulo5-production.up.railway.app/api",
- *      description="Servidor de Producción"
-=======
- *      description="Documentación oficial de los microservicios de mantenimiento."
- * )
- * @OA\Server(
- *      url="https://modulo5-production.up.railway.app/api",
- *      description="Servidor de Producción Railway"
->>>>>>> Stashed changes
- * )
- * @OA\SecurityScheme(
- *      securityScheme="bearerAuth",
- *      type="http",
- *      scheme="bearer"
- * )
- */
+
 class CategoriaHerramientaController extends Controller
 {
     /**
