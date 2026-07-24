@@ -14,7 +14,7 @@ use OpenApi\Attributes as OA;
 class TrabajoRepuestoController extends Controller
 {
     #[OA\Get(
-        path: "/api/trabajo-repuestos",
+        path: "/trabajo-repuestos",
         summary: "Listar uso de repuestos",
         tags: ["Uso de Repuestos"],
         responses: [
@@ -41,7 +41,7 @@ class TrabajoRepuestoController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/trabajo-repuestos",
+        path: "/trabajo-repuestos",
         summary: "Registrar repuesto a un trabajo",
         tags: ["Uso de Repuestos"],
         requestBody: new OA\RequestBody(
@@ -95,7 +95,7 @@ class TrabajoRepuestoController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/trabajo-repuestos/{id}",
+        path: "/trabajo-repuestos/{id}",
         summary: "Ver registro de repuesto por ID",
         tags: ["Uso de Repuestos"],
         parameters: [
@@ -137,7 +137,7 @@ class TrabajoRepuestoController extends Controller
     }
 
     #[OA\Put(
-        path: "/api/trabajo-repuestos/{id}",
+        path: "/trabajo-repuestos/{id}",
         summary: "Actualizar registro de repuesto",
         tags: ["Uso de Repuestos"],
         parameters: [
@@ -198,7 +198,7 @@ class TrabajoRepuestoController extends Controller
     }
 
     #[OA\Delete(
-        path: "/api/trabajo-repuestos/{id}",
+        path: "/trabajo-repuestos/{id}",
         summary: "Remover registro de repuesto (Soft Delete)",
         tags: ["Uso de Repuestos"],
         parameters: [
@@ -209,38 +209,49 @@ class TrabajoRepuestoController extends Controller
         ]
     )]
     public function destroy($id)
-{
-    try {
-        DB::beginTransaction();
-        
-        $trabajo = TrabajoMantenimiento::where('estado', 1)->find($id);
+    {
+        try {
+            DB::beginTransaction();
+            
+            $trabajoRepuesto = TrabajoRepuesto::where('estado', 1)->find($id);
 
-        if (!$trabajo) {
+            if (!$trabajoRepuesto) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Trabajo-Repuesto no encontrado.'
+                ], 404);
+            }
+
+            $trabajoRepuesto->update(['estado' => 0]);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Trabajo-Repuesto eliminado correctamente (estado = 0).'
+            ], 200);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'success' => false,
-                'message' => 'Trabajo de mantenimiento no encontrado.'
-            ], 404);
+                'message' => 'Error al eliminar el trabajo-repuesto.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $trabajo->update(['estado' => 0]);
-        DB::commit();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Trabajo de mantenimiento eliminado correctamente (estado = 0).'
-        ], 200);
-
-    } catch (Exception $e) {
-        DB::rollBack();
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al eliminar el trabajo de mantenimiento.',
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
 
+    #[OA\Patch(
+        path: "/trabajo-repuestos/{id}/restore",
+        summary: "Restaurar registro de repuesto eliminado lógicamente",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Restaurado exitosamente")
+        ]
+    )]
     public function restore($id)
     {
         try {
@@ -275,6 +286,14 @@ class TrabajoRepuestoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-repuestos/all-with-deleted",
+        summary: "Obtener todos los registros de repuestos (incluyendo eliminados)",
+        tags: ["Uso de Repuestos"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function allWithDeleted()
     {
         try {
@@ -298,6 +317,14 @@ class TrabajoRepuestoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-repuestos/trashed",
+        summary: "Obtener solo registros de repuestos eliminados (estado = 0)",
+        tags: ["Uso de Repuestos"],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function trashed()
     {
         try {
@@ -323,6 +350,17 @@ class TrabajoRepuestoController extends Controller
         }
     }
 
+    #[OA\Delete(
+        path: "/trabajo-repuestos/{id}/force",
+        summary: "Eliminar registro de repuesto físicamente de la base de datos",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Eliminado físicamente correctamente")
+        ]
+    )]
     public function forceDelete($id)
     {
         try {
@@ -356,6 +394,17 @@ class TrabajoRepuestoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-repuestos/trabajo/{idTrabajo}",
+        summary: "Obtener registros de repuestos por trabajo de mantenimiento",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "idTrabajo", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byTrabajo($idTrabajo)
     {
         try {
@@ -392,6 +441,17 @@ class TrabajoRepuestoController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: "/trabajo-repuestos/repuesto/{idRepuesto}",
+        summary: "Obtener trabajos por ID de repuesto",
+        tags: ["Uso de Repuestos"],
+        parameters: [
+            new OA\Parameter(name: "idRepuesto", in: "path", required: true, schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Operación exitosa")
+        ]
+    )]
     public function byRepuesto($idRepuesto)
     {
         try {
